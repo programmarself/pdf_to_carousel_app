@@ -16,7 +16,7 @@ if uploaded_files:
         doc = fitz.open(stream=uploaded_file.read(), filetype="pdf")
 
         pages = []
-       for page in doc:
+        for page in doc:
             zoom_x = 4.0  # X-axis zoom (4 times = ~400 DPI)
             zoom_y = 4.0  # Y-axis zoom
             matrix = fitz.Matrix(zoom_x, zoom_y)
