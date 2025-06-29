@@ -17,9 +17,13 @@ if uploaded_files:
 
         pages = []
         for page in doc:
-            pix = page.get_pixmap()
+            zoom = 2.5  # Increase to get higher resolution (you can go up to 3 or more)
+            matrix = fitz.Matrix(zoom, zoom)
+            pix = page.get_pixmap(matrix=matrix)
+
             img = Image.frombytes("RGB", [pix.width, pix.height], pix.samples)
             pages.append(img)
+
 
         st.success(f"Converted {len(pages)} slides!")
 
