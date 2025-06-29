@@ -16,13 +16,18 @@ if uploaded_files:
         doc = fitz.open(stream=uploaded_file.read(), filetype="pdf")
 
         pages = []
-        for page in doc:
-            zoom = 2.5  # Increase to get higher resolution (you can go up to 3 or more)
-            matrix = fitz.Matrix(zoom, zoom)
-            pix = page.get_pixmap(matrix=matrix)
+       for page in doc:
+            zoom_x = 4.0  # X-axis zoom (4 times = ~400 DPI)
+            zoom_y = 4.0  # Y-axis zoom
+            matrix = fitz.Matrix(zoom_x, zoom_y)
 
+            # Render page to an image with the zoom matrix (anti-aliasing effect)
+            pix = page.get_pixmap(matrix=matrix, colorspace=fitz.csRGB, alpha=False)
+
+            # Convert pixmap to image
             img = Image.frombytes("RGB", [pix.width, pix.height], pix.samples)
             pages.append(img)
+
 
 
         st.success(f"Converted {len(pages)} slides!")
