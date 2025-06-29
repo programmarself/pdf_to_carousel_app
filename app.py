@@ -1,20 +1,25 @@
-
 import streamlit as st
-from pdf2image import convert_from_bytes
+import fitz  # PyMuPDF
 from PIL import Image
 from io import BytesIO
 from utils import create_zip, create_ppt, create_word
 
 st.set_page_config(page_title="PDF to Carousel Converter", layout="wide")
 
-st.title("📚 PDF to Carousel Converter with Download Options")
+st.title("📚 PDF to Carousel Converter (Poppler-Free)")
 
 uploaded_files = st.file_uploader("Upload one or more PDF files", type=["pdf"], accept_multiple_files=True)
 
 if uploaded_files:
     for uploaded_file in uploaded_files:
         st.header(f"File: {uploaded_file.name}")
-        pages = convert_from_bytes(uploaded_file.read())
+        doc = fitz.open(stream=uploaded_file.read(), filetype="pdf")
+
+        pages = []
+        for page in doc:
+            pix = page.get_pixmap()
+            img = Image.frombytes("RGB", [pix.width, pix.height], pix.samples)
+            pages.append(img)
 
         st.success(f"Converted {len(pages)} slides!")
 
