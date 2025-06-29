@@ -1,5 +1,5 @@
 streamlit
-pdf2image
+PyMuPDF
 Pillow
 python-docx
 python-pptx
